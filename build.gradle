@@ -1,0 +1,91 @@
+plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.8.22"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.8.22"
+    id("com.google.devtools.ksp") version "1.8.22-1.0.11"
+    id("groovy") 
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.0.3"
+    id("io.micronaut.aot") version "4.0.3"
+}
+
+version = "0.1"
+group = "com.nodeMngmt"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation("io.micronaut:micronaut-http-client")
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    implementation("io.micronaut.data:micronaut-data-jpa")
+    ksp("io.micronaut.openapi:micronaut-openapi")
+    ksp("io.micronaut.serde:micronaut-serde-processor")
+    implementation("io.micronaut.flyway:micronaut-flyway")
+    implementation("io.micronaut.graphql:micronaut-graphql")
+    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    // postgres
+    implementation("org.postgresql:postgresql:${postgresVersion}")
+
+    // JPA
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa:${micronautDataVersion}")
+    implementation("org.jetbrains.exposed:exposed-core:0.37.2")
+
+    //kafka
+    implementation("io.micronaut.kafka:micronaut-kafka")
+
+    //httpClient
+    implementation("io.micronaut:micronaut-http-client")
+}
+
+
+application {
+    mainClass.set("com.nodeMngmt.ApplicationKt")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+}
+
+tasks {
+    compileKotlin {
+        compilerOptions {
+           jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
+    }
+    compileTestKotlin {
+        compilerOptions {
+           jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
+    }
+}
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("com.nodeMngmt.*")
+    }
+    aot {
+    // Please review carefully the optimizations enabled below
+    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+    }
+}
+
+
+
