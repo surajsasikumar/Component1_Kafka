@@ -4,10 +4,9 @@ import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.Column
 import java.time.Instant
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.LocalDate
 
 @Entity
 @Serdeable
@@ -26,5 +25,5 @@ data class AuditEntity(
     @Column(name = "updated_timestamp")
     var updatedTimestamp: Instant
 ){
-    constructor() : this("", "", "", "", Instant.now())
+    constructor(): this("","","","", Instant.now())
 }

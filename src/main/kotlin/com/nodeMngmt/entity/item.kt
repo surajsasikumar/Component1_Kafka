@@ -1,15 +1,10 @@
 package com.nodeMngmt.entity
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.data.annotation.Embeddable
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.Embedded
-import jakarta.persistence.Table
+
 @Serdeable
 @Introspected
 data class Item(
